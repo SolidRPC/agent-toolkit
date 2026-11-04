@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "solidrpc": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/agent-toolkit/src/cli.mjs",
+        "mcp"
+      ],
+      "env": {
+        "SOLIDRPC_TOKEN_FILE": "/absolute/private/solidrpc-management.key"
+      }
+    }
+  }
+}

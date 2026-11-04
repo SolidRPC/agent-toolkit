@@ -1,0 +1,3 @@
+[mcp_servers.solidrpc]
+url = "https://api.solidrpc.io/agent/mcp"
+bearer_token_env_var = "SOLIDRPC_TOKEN"

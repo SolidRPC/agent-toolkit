@@ -1,0 +1,6 @@
+[mcp_servers.solidrpc]
+command = "node"
+args = ["/absolute/path/to/agent-toolkit/src/cli.mjs", "mcp"]
+
+[mcp_servers.solidrpc.env]
+SOLIDRPC_TOKEN_FILE = "/absolute/private/solidrpc-management.key"

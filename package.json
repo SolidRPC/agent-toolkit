@@ -1,0 +1,41 @@
+{
+  "name": "@solidrpc/agent",
+  "version": "0.1.0",
+  "description": "SolidRPC agent management client and MCP server",
+  "type": "module",
+  "bin": {
+    "solidrpc": "src/cli.mjs"
+  },
+  "exports": {
+    ".": "./src/client.mjs",
+    "./mcp": "./src/mcp.mjs"
+  },
+  "files": [
+    "src",
+    "examples",
+    "skills",
+    "configs",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.20.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check:public": "node scripts/check-public.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "4.6.6"
+  },
+  "private": true,
+  "license": "MIT",
+  "author": "SolidRPC",
+  "homepage": "https://solidrpc.io/agents",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SolidRPC/agent-toolkit.git"
+  },
+  "mcpName": "io.solidrpc/agent"
+}
