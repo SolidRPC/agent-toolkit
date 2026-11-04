@@ -1,6 +1,6 @@
-# Release preparation
+# Release procedure
 
-The repository is private and version 0.1.0 is not published. These instructions do not authorize publication. Obtain owner approval before making the repository public, publishing npm packages or GitHub releases, or submitting directory listings.
+The repository is public. Version 0.1.0 was published on November 4, 2026 after owner approval. The [npm package](https://www.npmjs.com/package/@solidrpc/agent) and [release downloads](https://github.com/SolidRPC/agent-toolkit/releases/tag/v0.1.0) are available. Check out tag `v0.1.0` to reproduce that release. Later documentation changes on `main` are not part of its immutable archives. Future releases and directory submissions still require owner approval.
 
 ## Build and review
 
@@ -51,7 +51,7 @@ After the npm package exists, open its npm settings and configure Trusted Publis
 | Environment | `npm-production` |
 | Allowed operation | Direct publishing |
 
-Configure the GitHub `npm-production` environment with a required owner reviewer and deployment restricted to `main` before the first workflow run. GitHub rejected reviewer protection while this repository was private on its current plan. Configure it after the approved visibility change, or keep publication manual until an equivalent approval control is agreed. The workflow also reads the environment rules and refuses publication unless DamianFigiel is a required reviewer.
+The GitHub `npm-production` environment requires review by DamianFigiel and is restricted to `main`. npm Trusted Publishing is configured with the values above. The workflow also reads the environment rules and refuses publication unless DamianFigiel remains a required reviewer. Configuration was read back successfully. An OIDC publication has not yet been performed, because version 0.1.0 used the local npm login. Verify the complete OIDC path during the next approved version release.
 
 The workflow runs only through manual dispatch from `main`, with the exact package version and `publish-approved-release` confirmation. It refuses a private repository. It validates, audits, builds, and qualifies before publishing with OIDC. No npm token is stored in GitHub. Creating or pushing a tag does not publish anything.
 
