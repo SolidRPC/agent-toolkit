@@ -1,0 +1,55 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.solidrpc/agent",
+  "title": "SolidRPC",
+  "description": "Manage blockchain RPC keys, networks, usage and prepaid billing with a scoped SolidRPC token.",
+  "version": "0.1.0",
+  "websiteUrl": "https://solidrpc.io/agents",
+  "repository": {
+    "url": "https://github.com/SolidRPC/agent-toolkit",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.solidrpc.io/agent/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {management_token}",
+          "variables": {
+            "management_token": {
+              "description": "SolidRPC sa_ management token from an eligible account. Never use an ak_ RPC key.",
+              "isRequired": true,
+              "isSecret": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@solidrpc/agent",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ],
+      "environmentVariables": [
+        {
+          "name": "SOLIDRPC_TOKEN_FILE",
+          "description": "Absolute path to a private file containing only your sa_ management token. Requires Node.js 22.20.0 or newer.",
+          "isRequired": true
+        }
+      ]
+    }
+  ]
+}
