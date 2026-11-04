@@ -1,5 +1,8 @@
 from pathlib import Path
 import hashlib
+import base64
+import gzip
+import io
 import json
 import os
 import shutil
@@ -49,6 +52,13 @@ with tempfile.TemporaryDirectory(prefix='solidrpc-release-') as tmp:
     (candidate / 'package.json').write_text(json.dumps(pkg, indent=2) + '\n')
     packed = json.loads(subprocess.check_output(['npm', 'pack', '--ignore-scripts', '--json', '--pack-destination', str(out)], cwd=candidate))[0]
     tarball = out / packed['filename']
+    normalized = io.BytesIO()
+    with gzip.GzipFile(filename='', mode='wb', fileobj=normalized, compresslevel=0, mtime=0) as g:
+        g.write(gzip.decompress(tarball.read_bytes()))
+    tarball.write_bytes(normalized.getvalue())
+    packed['size'] = tarball.stat().st_size
+    packed['shasum'] = hashlib.sha1(tarball.read_bytes()).hexdigest()
+    packed['integrity'] = 'sha512-' + base64.b64encode(hashlib.sha512(tarball.read_bytes()).digest()).decode()
     with tarfile.open(tarball) as t:
         for member in t.getmembers():
             if not member.isfile() or not member.name.startswith('package/'):
