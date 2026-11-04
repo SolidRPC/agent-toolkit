@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
-const skip = new Set(['node_modules', '.git']);
+const skip = new Set(['node_modules', '.git', 'dist']);
 // Split scanner signatures so the scanner's own source contains no forbidden literal.
 const rules = [
   ['nonpublic environment', new RegExp(['sta'+'ging', 'CF-Access-'+'Client'].join('|'), 'i')],

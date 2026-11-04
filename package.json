@@ -23,7 +23,9 @@
   },
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "check:public": "node scripts/check-public.mjs"
+    "check:public": "node scripts/check-public.mjs",
+    "release:build": "python3 scripts/build-release.py",
+    "release:check": "node scripts/check-release.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
@@ -37,5 +39,20 @@
     "type": "git",
     "url": "https://github.com/SolidRPC/agent-toolkit.git"
   },
-  "mcpName": "io.solidrpc/agent"
+  "mcpName": "io.solidrpc/agent",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/SolidRPC/agent-toolkit/issues"
+  },
+  "keywords": [
+    "solidrpc",
+    "mcp",
+    "rpc",
+    "ethereum",
+    "base",
+    "ai-agents"
+  ]
 }
