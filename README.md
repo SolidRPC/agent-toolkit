@@ -25,7 +25,7 @@ npm test
 node src/cli.mjs request GET /onboarding
 ```
 
-Once the public release is available, install the pinned version from npm:
+Install the pinned version from npm:
 
 ```sh
 npm install --global @solidrpc/agent@0.1.0
@@ -35,7 +35,7 @@ solidrpc request GET /onboarding
 
 The CLI and local MCP server are included in this one package. Run `solidrpc mcp` to start the MCP server. Release downloads contain the npm tarball, source ZIP, and desktop MCP bundle. The bundle includes its runtime dependencies and requires Node.js 22.20 or later.
 
-Before publication, use the source commands above or install the locally built tarball. See [the release procedure](release/README.md) for review and verification.
+For development, use the source commands above or install a locally built tarball. Published downloads are available in [GitHub Releases](https://github.com/SolidRPC/agent-toolkit/releases/tag/v0.1.0). See [the release procedure](release/README.md) for review and verification.
 
 ## Give your agent access
 
@@ -90,7 +90,7 @@ npx skills add /absolute/path/to/agent-toolkit --skill solidrpc -a codex claude-
 
 For Cursor, if the shared skill is not listed, copy the same `SKILL.md` into `.cursor/skills/solidrpc/SKILL.md` in your project and start a fresh session. Codex uses `.agents/skills/solidrpc/SKILL.md`, and Claude Code uses `.claude/skills/solidrpc/SKILL.md`.
 
-After the repository becomes public, install the skill directly:
+Install the skill directly from this public repository:
 
 ```sh
 npx skills add SolidRPC/agent-toolkit --skill solidrpc -a codex claude-code cursor
