@@ -1,0 +1,45 @@
+{
+  "manifest_version": "0.3",
+  "name": "solidrpc",
+  "display_name": "SolidRPC",
+  "version": "0.1.0",
+  "description": "Manage blockchain RPC keys, networks, usage and billing with a scoped SolidRPC token.",
+  "author": {
+    "name": "SolidRPC",
+    "url": "https://solidrpc.io"
+  },
+  "homepage": "https://solidrpc.io/agents",
+  "documentation": "https://solidrpc.io/docs/agents",
+  "privacy_policies": [
+    "https://solidrpc.io/privacy"
+  ],
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "src/cli.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/src/cli.mjs",
+        "mcp"
+      ],
+      "env": {
+        "SOLIDRPC_TOKEN_FILE": "${user_config.token_file}"
+      }
+    }
+  },
+  "user_config": {
+    "token_file": {
+      "type": "file",
+      "title": "Management token file",
+      "description": "Private file containing only an sa_ management token.",
+      "required": true
+    }
+  },
+  "tools_generated": true,
+  "compatibility": {
+    "runtimes": {
+      "node": ">=22.20.0"
+    }
+  }
+}

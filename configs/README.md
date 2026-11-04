@@ -12,3 +12,38 @@ After connecting, list tools and call `solidrpc_networks`. A fresh session shoul
 Add `SOLIDRPC_READ_ONLY=1` to the local server environment when only reads are needed. Do not enable automatic approval of mutation tools merely to install this integration.
 
 Remote clients must support custom Bearer headers. SolidRPC's current hosted MCP does not provide OAuth. Clients that require OAuth should use the local process instead. Template availability is not proof of a completed end-to-end run in every client.
+
+## Installed npm package
+
+After installing `@solidrpc/agent@0.1.0` globally, use `solidrpc` as the MCP command with `mcp` as its only argument. Keep the same token-file environment setting. If a desktop app cannot find global npm binaries, use the absolute path reported by `command -v solidrpc` on POSIX or `where solidrpc` on Windows.
+
+For Claude Code:
+
+```sh
+claude mcp add --transport stdio solidrpc --env SOLIDRPC_TOKEN_FILE=/absolute/private/solidrpc-management.key -- solidrpc mcp
+```
+
+For Claude Desktop and Cursor:
+
+```json
+{
+  "mcpServers": {
+    "solidrpc": {
+      "command": "solidrpc",
+      "args": ["mcp"],
+      "env": {"SOLIDRPC_TOKEN_FILE": "/absolute/private/solidrpc-management.key"}
+    }
+  }
+}
+```
+
+For Codex:
+
+```toml
+[mcp_servers.solidrpc]
+command = "solidrpc"
+args = ["mcp"]
+
+[mcp_servers.solidrpc.env]
+SOLIDRPC_TOKEN_FILE = "/absolute/private/solidrpc-management.key"
+```

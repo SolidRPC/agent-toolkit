@@ -1,0 +1,32 @@
+name: Validate toolkit
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['22.20.0', '24']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - run: npm install --global npm@11.21.0 --ignore-scripts
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run check:public
+      - run: npm audit --audit-level=low
+      - run: npm run release:build
+      - run: npm run release:check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release-review-node-${{ matrix.node }}
+          path: dist/
+          retention-days: 14

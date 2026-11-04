@@ -15,7 +15,7 @@ For an existing account, delegate an agent credential from a paid plan or PAYG a
 | `sa_` management token | Account, keys, usage and billing | `https://api.solidrpc.io/agent/v1` and `/agent/mcp` |
 | `ak_` RPC key | Blockchain requests | RPC URL returned by `/networks` |
 
-## Install from source
+## Install
 
 Requires Node.js 22.20 or later. In a downloaded checkout of this toolkit:
 
@@ -25,15 +25,17 @@ npm test
 node src/cli.mjs request GET /onboarding
 ```
 
-This review build is not published to npm. To test the actual install path locally:
+Once the public release is available, install the pinned version from npm:
 
 ```sh
-npm pack
-npm install --prefix ./local-install ./solidrpc-agent-0.1.0.tgz
-./local-install/node_modules/.bin/solidrpc --help
+npm install --global @solidrpc/agent@0.1.0
+solidrpc --help
+solidrpc request GET /onboarding
 ```
 
-The proposed npm name is `@solidrpc/agent`. Do not use an unverified package with that name before the official release.
+The CLI and local MCP server are included in this one package. Run `solidrpc mcp` to start the MCP server. Release downloads contain the npm tarball, source ZIP, and desktop MCP bundle. The bundle includes its runtime dependencies and requires Node.js 22.20 or later.
+
+Before publication, use the source commands above or install the locally built tarball. See [the release procedure](release/README.md) for review and verification.
 
 ## Give your agent access
 
@@ -88,7 +90,13 @@ npx skills add /absolute/path/to/agent-toolkit --skill solidrpc -a codex claude-
 
 For Cursor, if the shared skill is not listed, copy the same `SKILL.md` into `.cursor/skills/solidrpc/SKILL.md` in your project and start a fresh session. Codex uses `.agents/skills/solidrpc/SKILL.md`, and Claude Code uses `.claude/skills/solidrpc/SKILL.md`.
 
-A future public install uses the approved repository URL. Installing a skill makes it available in that client. It does not make every agent discover or prefer SolidRPC.
+After the repository becomes public, install the skill directly:
+
+```sh
+npx skills add SolidRPC/agent-toolkit --skill solidrpc -a codex claude-code cursor
+```
+
+The same skill is included in the npm package and release downloads. Installing a skill makes it available in that client. It does not make every agent discover or prefer SolidRPC.
 
 ## Development
 

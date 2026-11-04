@@ -1,0 +1,68 @@
+name: Publish approved npm release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Approved package version
+        required: true
+        type: string
+      confirmation:
+        description: Type publish-approved-release after owner approval
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: npm-publication
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'SolidRPC/agent-toolkit' && github.ref == 'refs/heads/main' && github.event.inputs.confirmation == 'publish-approved-release'
+    environment: npm-production
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Verify release identity
+        env:
+          APPROVED_VERSION: ${{ inputs.version }}
+          REPOSITORY_PRIVATE: ${{ github.event.repository.private }}
+        run: |
+          node --input-type=module -e "import p from './package.json' with {type:'json'}; if (p.name !== '@solidrpc/agent' || p.version !== process.env.APPROVED_VERSION || process.env.REPOSITORY_PRIVATE !== 'false') process.exit(1)"
+          npm --version
+      - run: npm install --global npm@11.21.0 --ignore-scripts
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run check:public
+      - run: npm audit --audit-level=low
+      - run: npm run release:build
+      - run: npm run release:check
+      - name: Require owner review protection
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/SolidRPC/agent-toolkit/environments/npm-production > dist/environment-check.json
+          node --input-type=module -e "import fs from 'node:fs'; const e=JSON.parse(fs.readFileSync('dist/environment-check.json')); if(!e.protection_rules?.some(r=>r.type==='required_reviewers' && r.reviewers?.some(x=>x.reviewer?.login==='DamianFigiel'))) throw Error('Owner review protection must be configured before publication')"
+      - name: Publish through npm trusted publishing
+        env:
+          APPROVED_VERSION: ${{ inputs.version }}
+        run: npm publish "dist/solidrpc-agent-${APPROVED_VERSION}.tgz" --access public --provenance --ignore-scripts
+      - name: Verify registry integrity
+        env:
+          APPROVED_VERSION: ${{ inputs.version }}
+        run: |
+          npm view "@solidrpc/agent@${APPROVED_VERSION}" dist.integrity --json > dist/registry-integrity.json
+          node --input-type=module -e "import fs from 'node:fs'; const local=JSON.parse(fs.readFileSync('dist/npm-pack.json')); const remote=JSON.parse(fs.readFileSync('dist/registry-integrity.json')); if(local.integrity!==remote)process.exit(1)"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: published-release
+          path: dist/
