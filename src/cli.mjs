@@ -41,6 +41,7 @@ try {
     if (process.env.SOLIDRPC_TOKEN_FILE && process.env.SOLIDRPC_TOKEN) throw new Error('Choose one external token source');
     const externalToken = process.env.SOLIDRPC_TOKEN_FILE
       ? (await readPrivate(process.env.SOLIDRPC_TOKEN_FILE)).trim() : process.env.SOLIDRPC_TOKEN;
+    if (process.env.SOLIDRPC_TOKEN_FILE && !externalToken) throw new Error('Management token file is empty');
     const client = new SolidRPC({url:process.env.SOLIDRPC_URL || config.url, token:externalToken || config.token,
       readOnly:process.env.SOLIDRPC_READ_ONLY === '1'});
     if (config.token && config.url && config.url !== client.url) throw new Error('Use a separate profile for a different API origin');

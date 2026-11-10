@@ -54,6 +54,19 @@ test('external token file does not get rotated or leaked',async(t)=>{
  const read=await run(env,['request','GET','/networks']);assert.equal(read.code,0);assert.ok(!read.out.includes(token));
  const rotate=await run(env,['rotate']);assert.equal(rotate.code,1);assert.match(rotate.err,/External token/);assert.equal(f.calls.length,1);
 });
+test('a blank external token file cannot fall back to a managed profile', async (t) => {
+ const f = await fixture(t);
+ assert.equal((await run(f.env, ['login'], { token })).code, 0);
+ const file = path.join(f.dir, 'management.key');
+ await writeFile(file, ' \n', { mode: 0o600 });
+ const env = { ...f.env, SOLIDRPC_TOKEN_FILE: file };
+ for (const args of [['request', 'GET', '/me'], ['rotate']]) {
+  const result = await run(env, args);
+  assert.equal(result.code, 1);
+  assert.match(result.err, /token file is empty/i);
+  assert.equal(f.calls.length, 0);
+ }
+});
 test('rotation saves replacement then revokes old token and origin changes fail closed',async(t)=>{
  const f=await fixture(t);await run(f.env,['login'],{token});
  const switched=await run({...f.env,SOLIDRPC_URL:'https://api.solidrpc.io'},['request','GET','/me']);assert.equal(switched.code,1);assert.equal(f.calls.length,0);

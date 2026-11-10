@@ -4,7 +4,7 @@ The repository is public. Version 0.1.0 was published on November 4, 2026 after 
 
 ## Build and review
 
-Use Node.js 22.20 or later, npm, Python 3, Git, and unzip.
+Use Node.js 22.20 or later, npm, Python 3, Git, and unzip. Validation CI tests the 22.20.0 minimum and the latest Node.js 24 and 26 releases.
 
 ```sh
 npm ci --ignore-scripts

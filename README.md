@@ -39,14 +39,16 @@ For development, use the source commands above or install a locally built tarbal
 
 ## Give your agent access
 
-Save only the `sa_` token in a private file outside your repository. Configure `SOLIDRPC_TOKEN_FILE` with its absolute path. A secret manager can supply `SOLIDRPC_TOKEN` instead. Choose one source.
+Save only the `sa_` token in an owner-only file outside your repository. Configure `SOLIDRPC_TOKEN_FILE` with its absolute path. A secret manager can supply `SOLIDRPC_TOKEN` instead. Choose one source.
 
 ```sh
 export SOLIDRPC_TOKEN_FILE=/absolute/private/solidrpc-management.key
-node src/cli.mjs request GET /me
-node src/cli.mjs request GET /networks
-node src/cli.mjs mcp
+solidrpc request GET /me
+solidrpc request GET /networks
+solidrpc mcp
 ```
+
+From a source checkout, replace `solidrpc` with `node src/cli.mjs`.
 
 MCP setup templates for Codex, Claude Code/Desktop, and Cursor are in [configs](configs/README.md). They use the local process and a token file. The server reads that one file and sends the token to the SolidRPC management API by default. An explicit `SOLIDRPC_URL` override can send it to a loopback development server. Never use a real credential for loopback tests. Redirects are rejected.
 
@@ -66,7 +68,15 @@ Follow the live onboarding steps to sign the approved budget and fund the accoun
 
 After funding settles, rotate the bootstrap credential to obtain operational scopes. `solidrpc rotate` saves a replacement and a private retirement journal before retiring the old credential. Its output includes scopes and bootstrap status. If retirement fails, it returns `replacementSaved:true` and `oldRevoked:false` with exit code 2. Run `solidrpc retire-previous` to retry retirement without creating another credential. For external token files or secret managers, use explicit management requests and persist the replacement before revoking the old token. If rotation's response is lost, the old token remains usable. Repeated rotation can create orphaned credentials, so inspect and retire those deliberately.
 
-`solidrpc request` emits the API response. Key creation and credential rotation can return secrets. Redirect those responses to a private file, never a shared log. `sa_` credentials alone cannot approve a wallet budget. Card subscription purchases remain an owner action.
+`solidrpc request` emits the API response. Key creation and credential rotation can return secrets. On POSIX shells, use an owner-only directory and create a fresh output file with private permissions. For example, with approved key creation input:
+
+```sh
+(umask 077; set -C; solidrpc request POST /keys \
+  < /absolute/private/approved-key-request.json \
+  > /absolute/private/created-key.json)
+```
+
+Use a new output filename for each attempt and reuse the same idempotency key when retrying the same request. On Windows, use an owner-only directory and file ACLs. `sa_` credentials alone cannot approve a wallet budget. Card subscription purchases remain an owner action.
 
 ## Tools
 
