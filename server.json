@@ -3,8 +3,15 @@
   "name": "io.solidrpc/agent",
   "title": "SolidRPC",
   "description": "Manage blockchain RPC keys, networks, usage and prepaid billing with a scoped SolidRPC token.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://solidrpc.io/agents",
+  "icons": [
+    {
+      "src": "https://solidrpc.io/favicon-512.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
   "repository": {
     "url": "https://github.com/SolidRPC/agent-toolkit",
     "source": "github"
@@ -33,7 +40,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@solidrpc/agent",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       },

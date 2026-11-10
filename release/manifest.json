@@ -2,8 +2,9 @@
   "manifest_version": "0.3",
   "name": "solidrpc",
   "display_name": "SolidRPC",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Manage blockchain RPC keys, networks, usage and billing with a scoped SolidRPC token.",
+  "icon": "icon.png",
   "author": {
     "name": "SolidRPC",
     "url": "https://solidrpc.io"
