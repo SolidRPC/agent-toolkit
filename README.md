@@ -28,14 +28,14 @@ node src/cli.mjs request GET /onboarding
 Install the pinned version from npm:
 
 ```sh
-npm install --global @solidrpc/agent@0.1.0
+npm install --global @solidrpc/agent@0.1.1
 solidrpc --help
 solidrpc request GET /onboarding
 ```
 
 The CLI and local MCP server are included in this one package. Run `solidrpc mcp` to start the MCP server. Release downloads contain the npm tarball, source ZIP, and desktop MCP bundle. The bundle includes its runtime dependencies and requires Node.js 22.20 or later.
 
-For development, use the source commands above or install a locally built tarball. Published downloads are available in [GitHub Releases](https://github.com/SolidRPC/agent-toolkit/releases/tag/v0.1.0). See [the release procedure](release/README.md) for review and verification.
+For development, use the source commands above or install a locally built tarball. Published downloads are available in [GitHub Releases](https://github.com/SolidRPC/agent-toolkit/releases). See [the release procedure](https://github.com/SolidRPC/agent-toolkit/blob/main/release/README.md) for review and verification.
 
 ## Give your agent access
 

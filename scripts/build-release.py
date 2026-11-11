@@ -75,6 +75,7 @@ with tempfile.TemporaryDirectory(prefix='solidrpc-release-') as tmp:
     manifest = json.loads((root / 'release/manifest.json').read_text())
     if manifest['version'] != version:
         raise ValueError('MCP bundle version mismatch')
+    shutil.copy2(candidate / 'release/icon.png', bundle / 'icon.png')
     (bundle / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     env = {k:v for k,v in os.environ.items() if k not in ['NODE_AUTH_TOKEN','NPM_TOKEN']}
     subprocess.run(['npm', 'ci', '--omit=dev', '--ignore-scripts', '--no-fund', '--no-audit'], cwd=bundle, env=env, check=True)

@@ -41,11 +41,15 @@ try{
  const bundled=JSON.parse(await readFile(path.join(bundle,'manifest.json')));
  assert.equal(bundled.version,pkg.version);
  assert.equal(bundled.server.entry_point,'src/cli.mjs');
+ assert.equal(bundled.icon,'icon.png');
+ const icon=await readFile(path.join(bundle,bundled.icon));
+ assert.deepEqual(icon,await readFile(path.join(root,'release/icon.png')));
  const results=[];
  for(const location of [installed,bundle]){
   const client=new Client({name:'release-check',version:'1.0.0'});
   await client.connect(new StdioClientTransport({command:process.execPath,args:[path.join(location,'src/cli.mjs'),'mcp'],env:{PATH:process.env.PATH,SOLIDRPC_URL:`http://127.0.0.1:${server.address().port}`,SOLIDRPC_CONFIG_DIR:path.join(temp,'profile'),SOLIDRPC_READ_ONLY:'1'},stderr:'pipe'}));
   try{
+   assert.equal(client.getServerVersion().version,pkg.version);
    const list=await client.listTools();assert.equal(list.tools.length,9);
    assert.ok(!(await client.callTool({name:'solidrpc_networks',arguments:{}})).isError);
    const denied=await client.callTool({name:'solidrpc_manage',arguments:{method:'POST',path:'/keys',body:{name:'denied'}}});
