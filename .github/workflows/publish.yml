@@ -56,7 +56,7 @@ jobs:
       - name: Publish through npm trusted publishing
         env:
           APPROVED_VERSION: ${{ inputs.version }}
-        run: npm publish "dist/solidrpc-agent-${APPROVED_VERSION}.tgz" --access public --provenance --ignore-scripts
+        run: npm publish "./dist/solidrpc-agent-${APPROVED_VERSION}.tgz" --access public --provenance --ignore-scripts
       - name: Verify registry integrity
         env:
           APPROVED_VERSION: ${{ inputs.version }}
