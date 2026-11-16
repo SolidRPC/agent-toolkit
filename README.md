@@ -17,15 +17,7 @@ For an existing account, delegate an agent credential from a paid plan or PAYG a
 
 ## Install
 
-Requires Node.js 22.20 or later. In a downloaded checkout of this toolkit:
-
-```sh
-npm ci --ignore-scripts
-npm test
-node src/cli.mjs request GET /onboarding
-```
-
-Install the pinned version from npm:
+The minimum runtime is Node.js 22.20.0. Use the latest patch of a [supported Node.js LTS release](https://nodejs.org/en/about/previous-releases). Install the pinned version from npm.
 
 ```sh
 npm install --global @solidrpc/agent@0.1.1
@@ -35,7 +27,15 @@ solidrpc request GET /onboarding
 
 The CLI and local MCP server are included in this one package. Run `solidrpc mcp` to start the MCP server. Release downloads contain the npm tarball, source ZIP, and desktop MCP bundle. The bundle includes its runtime dependencies and requires Node.js 22.20 or later.
 
-For development, use the source commands above or install a locally built tarball. Published downloads are available in [GitHub Releases](https://github.com/SolidRPC/agent-toolkit/releases). See [the release procedure](https://github.com/SolidRPC/agent-toolkit/blob/main/release/README.md) for review and verification.
+For development, run the following from a checkout.
+
+```sh
+npm ci --ignore-scripts
+npm test
+node src/cli.mjs request GET /onboarding
+```
+
+Published downloads are available in [GitHub Releases](https://github.com/SolidRPC/agent-toolkit/releases). See [the release procedure](https://github.com/SolidRPC/agent-toolkit/blob/main/release/README.md) for review and verification.
 
 ## Give your agent access
 
@@ -59,7 +59,7 @@ Set `SOLIDRPC_READ_ONLY=1` for a locally enforced read-only session. The server 
 Read the terms URLs and current revision in onboarding. After owner approval, send JSON on stdin:
 
 ```sh
-node src/cli.mjs provision < /absolute/private/approved-account.json
+solidrpc provision < /absolute/private/approved-account.json
 ```
 
 The input contains `email`, `termsRevision`, and `acceptTerms: true`. The CLI saves the bootstrap secret before the network request. Repeat the same input and profile after a lost response. Use `SOLIDRPC_PROFILE` for separate accounts.
