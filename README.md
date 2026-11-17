@@ -20,7 +20,7 @@ For an existing account, delegate an agent credential from a paid plan or PAYG a
 The minimum runtime is Node.js 22.20.0. Use the latest patch of a [supported Node.js LTS release](https://nodejs.org/en/about/previous-releases). Install the pinned version from npm.
 
 ```sh
-npm install --global @solidrpc/agent@0.1.1
+npm install --global @solidrpc/agent@0.1.2
 solidrpc --help
 solidrpc request GET /onboarding
 ```
