@@ -78,7 +78,7 @@ export function managementServer(client) {
     );
   tool(
     "solidrpc_networks",
-    "List supported networks and RPC capabilities.",
+    "List networks and RPC capabilities for account access. For wallet-only RPC, read payPerRequest.capabilities in live onboarding.",
     {},
     () => client.networks(),
     true,
@@ -118,7 +118,7 @@ export function managementServer(client) {
   );
   tool(
     "solidrpc_top_up",
-    "Reserve a top-up quote within the signed payment ceiling. Does not transfer funds. Use the returned x402 requirements with an owner-authorized external wallet.",
+    "Reserve a prepaid account credit top-up quote within the signed payment ceiling. Does not transfer funds. Use the returned x402 requirements with an owner-authorized external wallet.",
     {
       amountCents: z.number().int().min(100),
       idempotencyKey: z.string().min(16),

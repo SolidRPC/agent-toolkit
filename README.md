@@ -4,7 +4,15 @@ Let an agent connect your application to blockchain RPC within your approved bud
 
 This repository contains a Node.js management client, a local MCP server, an agent skill, and runnable RPC examples. The hosted MCP endpoint is also available at `https://api.solidrpc.io/agent/mcp`.
 
-## Start here
+## Pay for an RPC call with a wallet
+
+Start at [live agent onboarding](https://api.solidrpc.io/agent/v1/onboarding) and follow its `payPerRequest` links. Use [`buyerGuide`](https://rpc.solidrpc.io/x402/batch/guide.md) for funding, signing and recovery, [`capabilities`](https://rpc.solidrpc.io/x402/batch/capabilities) for supported networks, methods and limits, and [`openapi`](https://rpc.solidrpc.io/x402/batch/openapi.json) for the RPC and receipt endpoints. Wallet-only calls use x402 batch settlement, including a single call. A wallet and HTTP are enough. You can skip account creation, the RPC key, the management token and toolkit installation.
+
+POST the exact JSON-RPC body without payment for a free HTTP 402 quote. The [Base block quote example](examples/README.md#free-wallet-only-quote) shows the fee in USDC, payment network and expiry. Buying the result spends the quoted RPC fee. A reusable USDC deposit funds the channel for multiple purchases. Base ETH pays gas for on-chain operations such as depositing or withdrawing. Get owner approval for the fee, any deposit and gas before moving funds.
+
+Keep wallet keys local and sign the cumulative voucher in the wallet. Save the original request, signed voucher and payment identifier privately before submitting. If the response is lost, retry the identical request with the same signed payment and identifier, or follow the buyer guide to retrieve its receipt.
+
+## Account access
 
 Read [agent onboarding](https://api.solidrpc.io/agent/v1/onboarding) and the [setup guide](https://solidrpc.io/docs/agents). The live onboarding response supplies availability, payment network, terms, pricing, limits, and recovery steps. Read those values at setup time.
 
@@ -15,7 +23,7 @@ For an existing account, delegate an agent credential from a paid plan or PAYG a
 | `sa_` management token | Account, keys, usage and billing | `https://api.solidrpc.io/agent/v1` and `/agent/mcp` |
 | `ak_` RPC key | Blockchain requests | RPC URL returned by `/networks` |
 
-## Install
+## Install the account CLI and MCP server
 
 The minimum runtime is Node.js 22.20.0. Use the latest patch of a [supported Node.js LTS release](https://nodejs.org/en/about/previous-releases). Install the pinned version from npm.
 
@@ -37,7 +45,7 @@ node src/cli.mjs request GET /onboarding
 
 Published downloads are available in [GitHub Releases](https://github.com/SolidRPC/agent-toolkit/releases). See [the release procedure](https://github.com/SolidRPC/agent-toolkit/blob/main/release/README.md) for review and verification.
 
-## Give your agent access
+## Give your agent account access
 
 Save only the `sa_` token in an owner-only file outside your repository. Configure `SOLIDRPC_TOKEN_FILE` with its absolute path. A secret manager can supply `SOLIDRPC_TOKEN` instead. Choose one source.
 
@@ -64,7 +72,7 @@ solidrpc provision < /absolute/private/approved-account.json
 
 The input contains `email`, `termsRevision`, and `acceptTerms: true`. The CLI saves the bootstrap secret before the network request. Repeat the same input and profile after a lost response. Use `SOLIDRPC_PROFILE` for separate accounts.
 
-Follow the live onboarding steps to sign the approved budget and fund the account. The [published payment example](https://api.solidrpc.io/agent/v1/example) explains the external wallet flow. This toolkit does not hold wallet keys or automatically pay. Persist idempotency keys and payment proofs privately before submission. For uncertain payments, inspect the existing funding intent and follow its recovery instructions. Never create a second payment to guess whether the first succeeded.
+Follow the live onboarding steps to sign the approved budget and fund the account. The [prepaid account funding example](https://api.solidrpc.io/agent/v1/example) explains the external wallet flow. This toolkit does not hold wallet keys or automatically pay. Persist idempotency keys and payment proofs privately before submission. For uncertain payments, inspect the existing funding intent and follow its recovery instructions. Never create a second payment to guess whether the first succeeded.
 
 After funding settles, rotate the bootstrap credential to obtain operational scopes. `solidrpc rotate` saves a replacement and a private retirement journal before retiring the old credential. Its output includes scopes and bootstrap status. If retirement fails, it returns `replacementSaved:true` and `oldRevoked:false` with exit code 2. Run `solidrpc retire-previous` to retry retirement without creating another credential. For external token files or secret managers, use explicit management requests and persist the replacement before revoking the old token. If rotation's response is lost, the old token remains usable. Repeated rotation can create orphaned credentials, so inspect and retire those deliberately.
 
@@ -78,11 +86,11 @@ After funding settles, rotate the bootstrap credential to obtain operational sco
 
 Use a new output filename for each attempt and reuse the same idempotency key when retrying the same request. On Windows, use an owner-only directory and file ACLs. `sa_` credentials alone cannot approve a wallet budget. Card subscription purchases remain an owner action.
 
-## Tools
+## Account MCP tools
 
-The MCP server exposes network discovery, RPC key listing/creation/revocation, usage, billing, top-up quotes, support tickets, and a generic management request tool. A top-up quote does not transfer USDC. Support-ticket creation sends a message, so use it only when the owner requests contact. Clients must retain their own approval controls for writes and payments.
+The MCP server exposes account network discovery, RPC key listing/creation/revocation, usage, billing, top-up quotes, support tickets, and a generic management request tool. `solidrpc_top_up` reserves a quote for prepaid account credit. Funding requires a separate wallet action. Support-ticket creation sends a message, so use it only when the owner requests contact. Clients must retain their own approval controls for writes and payments.
 
-## Examples
+## Account RPC examples
 
 Use a separate `ak_` key in a private file selected by `RPC_KEY_FILE`, and set `RPC_ORIGIN=https://rpc.solidrpc.io`. These scripts make billable read calls and require an approved usage budget. Read [examples/README.md](examples/README.md) before running them.
 
@@ -106,7 +114,7 @@ Install the skill directly from this public repository:
 npx skills add SolidRPC/agent-toolkit --skill solidrpc -a codex claude-code cursor
 ```
 
-The same skill is included in the npm package and release downloads. Installing a skill makes it available in that client. It does not make every agent discover or prefer SolidRPC.
+Each npm package and release download contains the skill from its release. Version 0.1.2 contains the account-focused skill. To use the wallet-only instructions from this checkout, refresh the skill in your agent client.
 
 ## Development
 
