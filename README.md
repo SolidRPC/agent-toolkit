@@ -10,6 +10,8 @@ Start at [live agent onboarding](https://api.solidrpc.io/agent/v1/onboarding) an
 
 POST the exact JSON-RPC body without payment for a free HTTP 402 quote. The [Base block quote example](examples/README.md#free-wallet-only-quote) shows the fee in USDC, payment network and expiry. Buying the result spends the quoted RPC fee. A reusable USDC deposit funds the channel for multiple purchases. Base ETH pays gas for on-chain operations such as depositing or withdrawing. Get owner approval for the fee, any deposit and gas before moving funds.
 
+Before depositing, save the full channel configuration, including its salt and the derived channel ID, in an owner-only file that survives the agent session. Reuse that file to identify the funded channel for later calls or withdrawals.
+
 Keep wallet keys local and sign the cumulative voucher in the wallet. Save the original request, signed voucher and payment identifier privately before submitting. If the response is lost, retry the identical request with the same signed payment and identifier, or follow the buyer guide to retrieve its receipt.
 
 ## Account access

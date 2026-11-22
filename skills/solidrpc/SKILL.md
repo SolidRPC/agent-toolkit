@@ -13,7 +13,8 @@ Start at [live onboarding](https://api.solidrpc.io/agent/v1/onboarding). For a p
 
 1. Check the requested network, method and limits in capabilities. Use the advertised RPC URL for that chain. POST the exact JSON-RPC body without payment for a free HTTP 402 quote. Read the amount in millionths of USDC. Check the scheme, payment network, method, asset, recipient, expiry and live terms before signing.
 2. Get owner approval for the quoted RPC fee, any reusable USDC channel deposit and the Base ETH gas for on-chain operations. The fee buys this request. The deposit can fund later calls, and unused funds can be withdrawn under the live terms.
-3. Follow the [buyer guide](https://rpc.solidrpc.io/x402/batch/guide.md) to fund or reuse a channel, sign the cumulative voucher locally, and recover a payment. Keep wallet keys local. Save the original request, signed payment and payment identifier privately before submitting. If a response is lost, retry the identical request with the same signed voucher and payment identifier or retrieve its receipt as documented.
+3. Follow the [buyer guide](https://rpc.solidrpc.io/x402/batch/guide.md) to build the channel configuration and derive its channel ID. Before depositing, save the full configuration, including its salt and the derived channel ID, in an owner-only file that survives the agent session. Load that file when reusing or withdrawing from the channel.
+4. Follow the guide to fund or reuse the channel and sign the cumulative voucher locally. Keep wallet keys local. Save the original request, signed payment and payment identifier privately before submitting. If a response is lost, retry the identical request with the same signed voucher and payment identifier or retrieve its receipt as documented.
 
 ## Account discovery
 

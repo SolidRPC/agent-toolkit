@@ -5,6 +5,11 @@ if (payPerRequest?.scheme !== 'batch-settlement') {
   throw new Error('Onboarding does not advertise x402 batch settlement');
 }
 
+const capabilitiesResponse = await fetch(payPerRequest.capabilities, { redirect: 'error' });
+if (!capabilitiesResponse.ok) throw new Error(`Capabilities returned HTTP ${capabilitiesResponse.status}`);
+const { asset, paymentNetwork, priceUnit } = await capabilitiesResponse.json();
+if (priceUnit !== '0.000001 USDC') throw new Error('Expected capabilities to price calls in millionths of USDC');
+
 const response = await fetch(payPerRequest.rpc.replace('{chainId}', '8453'), {
   method: 'POST',
   redirect: 'error',
@@ -15,9 +20,17 @@ if (response.status !== 402) throw new Error(`Expected a free HTTP 402 quote, re
 
 const { accepts, quote } = await response.json();
 const offer = accepts?.find(offer => offer.scheme === 'batch-settlement');
-if (!offer?.network || !Number.isFinite(Date.parse(quote?.expiresAt))) {
-  throw new Error('Incomplete batch-settlement quote');
+if (!offer) throw new Error('Missing batch-settlement offer');
+if (typeof asset !== 'string' || !/^0x[0-9a-f]{40}$/i.test(asset) ||
+    typeof offer.asset !== 'string' || offer.asset.toLowerCase() !== asset.toLowerCase()) {
+  throw new Error('Quote asset does not match live capabilities');
 }
+if (!paymentNetwork || typeof paymentNetwork !== 'string' || offer.network !== paymentNetwork) {
+  throw new Error('Quote payment network does not match live capabilities');
+}
+const expiry = Date.parse(quote?.expiresAt);
+if (!Number.isFinite(expiry)) throw new Error('Missing or invalid quote expiry');
+if (expiry <= Date.now()) throw new Error('Quote has expired');
 if (typeof offer.amount !== 'string' || !/^\d+$/.test(offer.amount)) {
   throw new Error('Expected the price in integer millionths of USDC');
 }
