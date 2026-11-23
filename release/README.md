@@ -36,7 +36,7 @@ npm publish "./dist/solidrpc-agent-${APPROVED_VERSION:?Set the approved release 
 6. Create the version tag at the approved source commit and publish the GitHub release with the matching release notes, three reviewed downloads, and `SHA256SUMS`. Record the tag commit and artifact hashes together.
 7. Publish the approved `server.json` to the MCP Registry and verify the public entry. Check that Glama associates the same release version with the tested build and lists the expected tools.
 
-Versions 0.1.0 and 0.1.1 were published through a maintainer login and have no GitHub build provenance. Check npm's attestation metadata before making a provenance claim.
+Versions 0.1.0 through 0.1.2 were published through a maintainer login and have no GitHub build provenance. Check npm's attestation metadata before making a provenance claim.
 
 ## Future releases through GitHub Actions
 
@@ -51,10 +51,10 @@ After the npm package exists, open its npm settings and configure Trusted Publis
 | Environment | `npm-production` |
 | Allowed operation | Direct publishing |
 
-The GitHub `npm-production` environment is restricted to `main`. The workflow checks that DamianFigiel remains a required reviewer. The 0.1.1 trusted publish reached npm but received HTTP 404. Maintainer publication succeeded with the approved tarball. End-to-end trusted publishing remains unverified.
+The GitHub `npm-production` environment is restricted to `main`. The workflow checks that DamianFigiel remains a required reviewer. Trusted publication attempts for 0.1.1, 0.1.2, and 0.1.3 received HTTP 404 at upload. A signed provenance statement in the build log does not confirm npm accepted the package.
 
 The workflow runs only through manual dispatch from `main`, with the exact package version and `publish-approved-release` confirmation. It refuses a private repository. It validates, audits, builds, and qualifies before publishing with OIDC. No npm token is stored in GitHub. Creating or pushing a tag does not publish anything.
 
-The workflows pin npm 11.21.0 and use Node 24 for publishing. Check the trusted publisher settings in npm before dispatching the next approved release.
+The workflows pin npm 11.21.0 and use Node 24 for publishing. Before dispatching, verify the trusted publisher settings in npm, including exact casing and permission for direct publishing. If the upload fails, check the exact version's integrity and tarball availability before retrying. When npm lists the matching version and integrity but the tarball is temporarily unavailable, wait for the download to become available.
 
 References: [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/), [publishing scoped packages](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).

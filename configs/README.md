@@ -15,7 +15,7 @@ Remote clients must support custom Bearer headers. SolidRPC's current hosted MCP
 
 ## Installed npm package
 
-After installing `@solidrpc/agent@0.1.3` globally, use `solidrpc` as the MCP command with `mcp` as its only argument. Keep the same token-file environment setting. If a desktop app cannot find global npm binaries, use the absolute path reported by `command -v solidrpc` on POSIX or `where solidrpc` on Windows.
+Follow the [npm installation instructions](../README.md#install-the-account-cli-and-mcp-server), then use `solidrpc` as the MCP command with `mcp` as its only argument. Keep the same token-file environment setting. If a desktop app cannot find global npm binaries, use the absolute path reported by `command -v solidrpc` on POSIX or `where solidrpc` on Windows.
 
 For Claude Code:
 
