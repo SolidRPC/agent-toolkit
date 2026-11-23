@@ -30,7 +30,7 @@ For an existing account, delegate an agent credential from a paid plan or PAYG a
 The minimum runtime is Node.js 22.20.0. Use the latest patch of a [supported Node.js LTS release](https://nodejs.org/en/about/previous-releases). Install the pinned version from npm.
 
 ```sh
-npm install --global @solidrpc/agent@0.1.2
+npm install --global @solidrpc/agent@0.1.3
 solidrpc --help
 solidrpc request GET /onboarding
 ```
@@ -116,7 +116,7 @@ Install the skill directly from this public repository:
 npx skills add SolidRPC/agent-toolkit --skill solidrpc -a codex claude-code cursor
 ```
 
-Each npm package and release download contains the skill from its release. Version 0.1.2 contains the account-focused skill. To use the wallet-only instructions from this checkout, refresh the skill in your agent client.
+Each npm package and release download contains the skill from its release. Version 0.1.3 includes the wallet-only instructions. Refresh the installed skill in your agent client to use them.
 
 ## Development
 
