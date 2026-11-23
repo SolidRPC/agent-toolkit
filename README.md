@@ -27,13 +27,15 @@ For an existing account, delegate an agent credential from a paid plan or PAYG a
 
 ## Install the account CLI and MCP server
 
-The minimum runtime is Node.js 22.20.0. Use the latest patch of a [supported Node.js LTS release](https://nodejs.org/en/about/previous-releases). Install the pinned version from npm.
+The minimum runtime is Node.js 22.20.0. Use the latest patch of a [supported Node.js LTS release](https://nodejs.org/en/about/previous-releases). Install the current npm release.
 
 ```sh
-npm install --global @solidrpc/agent@0.1.3
+npm install --global @solidrpc/agent@latest
 solidrpc --help
 solidrpc request GET /onboarding
 ```
+
+For reproducible installs, replace `latest` with a published version from [npm](https://www.npmjs.com/package/@solidrpc/agent?activeTab=versions).
 
 The CLI and local MCP server are included in this one package. Run `solidrpc mcp` to start the MCP server. Release downloads contain the npm tarball, source ZIP, and desktop MCP bundle. The bundle includes its runtime dependencies and requires Node.js 22.20 or later.
 
